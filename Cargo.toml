@@ -1,0 +1,9 @@
+[package]
+name = "fuzzy-regex"
+version = "0.1.0"
+authors = ["c74d <8573dd@gmail.com>"]
+
+[dependencies]
+error-chain = "0.10"
+fst = "0.2"
+fst-regex = "0.1"

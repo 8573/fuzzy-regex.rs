@@ -1,0 +1,260 @@
+Rules:
+    Match goals:
+        - Closest (Levenshtein)
+        - Longest (usual DFA regex)
+        - Leftmost (usual DFA regex)
+    Thus sort prio queue by:
+        - Distance ASC
+        - Trace DESC
+        - Pos ASC
+
+
+Regex: /a(b|c)d/
+String: "ward"
+
+The regex becomes the following state machine:
+
+        START
+          |
+         (a)
+          |
+          v
+       SECOND
+       /    \
+     (b)    (c)
+     /        \
+    v          v
+  LEFT       RIGHT
+    \         /
+    (d)     (d)
+      \     /
+       v   v
+      ACCEPT
+
+
+So, we try to match:
+
+---
+State: START
+Pos: 0
+Trace: 0
+Distance: 0
+Queue: []
+
+[ w a r d ]
+ ^
+'w' does not match
+
+Proceed to next character, and reset to START
+---
+State: START
+Pos: 1
+Trace: 0
+Distance: 0
+Queue: [
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+]
+
+[ w a r d]
+   ^
+
+'a' matches
+Proceed to next character, and state SECOND
+---
+State: SECOND
+Pos: 2
+Trace: 1
+Distance: 0
+Queue: [
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 1,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+]
+
+[ w a r d ]
+     ^
+
+'r' fails to match
+Proceed to next character, and reset to START
+---
+State: START
+Pos: 3
+Trace: 0
+Distance: 0
+Queue: [
+    {
+        state: SECOND,
+        pos: 2,
+        trace: 1,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 1,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+]
+
+[ w a r d ]
+       ^
+'d' fails to match
+Proceed to next character, and reset to START
+---
+State: START
+Pos: 4
+Trace: 0
+Distance: 0
+Queue: [
+    {
+        state: SECOND,
+        pos: 2,
+        trace: 1,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 1,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 3,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+]
+
+[ w a r d ]
+         ^
+
+At end and not at ACCEPT; match failed
+Pull from queue and attempt Levenshtein correction
+---
+State: SECOND
+Pos: 2
+Trace: 1
+Distance: 0
+Trying: Substitution
+Queue {
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 1,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 3,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 4,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+}
+
+[ w a r d ]
+     ^
+
+"Oh, hey, we could replace the r with a b and move to LEFT"
+Reinsert state, with tried++
+Move to LEFT
+---
+State: SECOND
+Pos: 3
+Trace: 2
+Distance: 1
+Queue {
+    {
+        state: SECOND,
+        pos: 2,
+        trace: 1,
+        dist: 0,
+        tried: 1,
+    }
+    {
+        state: START,
+        pos: 0,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 1,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 3,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+    {
+        state: START,
+        pos: 4,
+        trace: 0,
+        dist: 0,
+        tried: 0,
+    }
+}
+
+[ w a r d ]
+       ^
+'d' matches, move to ACCEPT
+---
+At EOI, at ACCEPT, match succeeded with distance 1
