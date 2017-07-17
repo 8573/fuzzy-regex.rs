@@ -7,3 +7,9 @@ required by applicable law or agreed to in writing, software distributed under
 the Licence is distributed on an ***"as is" basis, without warranties or
 conditions of any kind***, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
+
+The file `doc/eternaleye-worked-example.txt` was wholly authored by
+[eternaleye], who released it under [CC0].
+
+[eternaleye]: <https://github.com/eternaleye>
+[CC0]: <https://creativecommons.org/about/cc0/>
