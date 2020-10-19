@@ -2,6 +2,15 @@
 name = "fuzzy-regex"
 version = "0.1.0"
 authors = ["c74d <8573dd@gmail.com>"]
+edition = "2018"
+description = "Match regexes fuzzily, i.e., approximately"
+repository = "https://github.com/8573/fuzzy-regex.rs"
+license = "Apache-2.0"
+keywords = ["regex", "regular-expressions", "fuzzy", "approximate", "approximation"]
+categories = ["algorithms", "parsing"]
+
+[badges.travis-ci]
+repository = "8573/fuzzy-regex.rs"
 
 [dependencies]
 error-chain = "0.10"
