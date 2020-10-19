@@ -22,7 +22,8 @@ env:
   jobs:
     - ACTION="cargo test"
 
-    - ACTION="cargo check"
+    # `cargo check` doesn't seem to do anything that `cargo clippy` doesn't.
+    #- ACTION="cargo check"
 
     - ACTION="cargo clippy"
 
