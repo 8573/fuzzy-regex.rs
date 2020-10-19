@@ -1,0 +1,26 @@
+name: GitHub Actions CI
+
+on: [push, pull_request]
+
+jobs:
+  # Adapted from the documentation at
+  # <https://github.com/EmbarkStudios/cargo-deny-action>
+  cargo-deny:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        checks:
+          - advisories
+          - bans licenses sources
+
+    # Prevent sudden announcement of a new advisory from failing CI:
+    continue-on-error: ${{ matrix.checks == 'advisories' }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: EmbarkStudios/cargo-deny-action@v1
+      with:
+        command: check ${{ matrix.checks }}
+
+# Vim: set et ts=2 sts=2 sw=2 tw=80 spell:
