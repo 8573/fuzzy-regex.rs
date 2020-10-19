@@ -1,0 +1,28 @@
+# See <https://embarkstudios.github.io/cargo-deny/>.
+
+[advisories]
+unmaintained = "deny"
+yanked = "deny"
+# [2020-10-19] TODO: Uncomment the following line when the option becomes
+# available, with `cargo-deny` >=0.7.4.
+#unsound = "deny"
+ignore = [
+    #"RUSTSEC-0000-0000",
+]
+
+[licenses]
+copyleft = "deny"
+allow = [
+    "Apache-2.0",
+    "MIT",
+]
+
+# For example
+[[bans.deny]]
+name = "plutonium"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+
+# Vim: set tw=80 spell:
