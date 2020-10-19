@@ -1,0 +1,50 @@
+version: ~> 1.0
+
+language: rust
+
+rust:
+  - stable
+
+  # The latest patch release of the fifth anniversary version of Rust.
+  - 1.44.1
+
+cache: cargo
+
+before_script:
+  # Ensure we have Clippy and rustfmt.
+  - rustup component add clippy
+  - rustup component add rustfmt
+
+script:
+  - "$ACTION  # See ``Setting environment variables ...'', above."
+
+env:
+  jobs:
+    - ACTION="cargo test"
+
+    # `cargo check` doesn't seem to do anything that `cargo clippy` doesn't.
+    #- ACTION="cargo check"
+
+    - ACTION="cargo clippy"
+
+    - ACTION="cargo fmt"
+
+  global:
+    - CARGO_TERM_VERBOSE=true
+
+jobs:
+  include:
+    # Print our dependency tree in case that's useful for debugging.  This
+    # needn't be done on multiple Rust versions.
+    - rust: stable
+      env: ACTION="cargo tree"
+
+  allow_failures:
+    - rust: nightly
+
+    # It may be impossible to satisfy rustfmt on multiple Rust versions
+    # simultaneously.
+    - rust: stable
+      env: ACTION="cargo fmt"
+
+# Vim: set et ts=2 sts=2 sw=2 tw=80 spell:
